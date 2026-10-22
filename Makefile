@@ -25,3 +25,4 @@ grab-original:
 
 clean:
 	rm -f $(BINARIES)
+	rm -rf cursor-plugins
