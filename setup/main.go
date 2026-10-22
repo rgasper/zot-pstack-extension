@@ -171,5 +171,5 @@ func newWizard(h *host) (*wizard, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &wizard{host: h, path: path, entries: entries, cfg: cfg, step: stepProvider}, nil
+	return &wizard{host: h, path: path, entries: entries, cfg: cfg, step: stepProvider, autoSwarm: autoSwarmOn()}, nil
 }

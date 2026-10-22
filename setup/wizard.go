@@ -34,6 +34,10 @@ type wizard struct {
 	// query is the model filter typed on a model step. It resets when the
 	// step changes.
 	query string
+	// autoSwarm is zot's auto-swarm setting when the wizard opened. When it is
+	// off, the provider step shows a warning, since pstack's parallel steps
+	// need swarm_spawn.
+	autoSwarm bool
 }
 
 // visibleModels is the model list the current step shows and picks from.
@@ -50,6 +54,9 @@ func (w *wizard) Render() (title string, lines []string, footer string) {
 	case stepProvider:
 		title = "pstack setup: provider"
 		lines = append(lines, "Pick the provider pstack models come from.", "")
+		if !w.autoSwarm {
+			lines = append(lines, "⚠ auto-swarm is off. pstack's parallel steps need it: turn it on in /settings.", "")
+		}
 		for i, p := range Providers(w.entries) {
 			lines = append(lines, cursorRow(i == w.cursor, p))
 		}
