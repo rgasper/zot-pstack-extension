@@ -203,3 +203,38 @@ func TestRenderShowsEachStep(t *testing.T) {
 		}
 	}
 }
+
+// On macOS the Delete key sends backspace. With an empty filter it must clear
+// the reviewer list, the same as the delete key does.
+func TestBackspaceClearsReviewersWhenFilterEmpty(t *testing.T) {
+	w, _ := newTestWizard(t)
+	w.cfg.Provider = "amazon-bedrock"
+	w.step = stepReviewers
+	w.cursor = 1
+	w.HandleKey("enter", "")
+	w.HandleKey("enter", "")
+	if len(w.cfg.Reviewers) != 2 {
+		t.Fatalf("want 2 reviewers, got %v", w.cfg.Reviewers)
+	}
+	w.HandleKey("backspace", "")
+	if len(w.cfg.Reviewers) != 0 {
+		t.Fatalf("backspace with empty filter should clear reviewers, got %v", w.cfg.Reviewers)
+	}
+}
+
+// Backspace with text in the filter trims the filter and keeps the reviewers.
+func TestBackspaceTrimsFilterWithoutClearingReviewers(t *testing.T) {
+	w, _ := newTestWizard(t)
+	w.cfg.Provider = "amazon-bedrock"
+	w.step = stepReviewers
+	w.cursor = 1
+	w.HandleKey("enter", "")
+	w.HandleKey("rune", "g")
+	w.HandleKey("backspace", "")
+	if w.query != "" {
+		t.Fatalf("filter should be trimmed to empty, got %q", w.query)
+	}
+	if len(w.cfg.Reviewers) != 1 {
+		t.Fatalf("backspace on a filter must not clear reviewers, got %v", w.cfg.Reviewers)
+	}
+}

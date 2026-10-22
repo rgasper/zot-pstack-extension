@@ -155,6 +155,10 @@ func (w *wizard) HandleKey(key, text string) (closePanel bool) {
 		if w.onModelStep() && w.query != "" {
 			r := []rune(w.query)
 			w.setQuery(string(r[:len(r)-1]))
+		} else if w.step == stepReviewers {
+			// On macOS the key labelled Delete sends backspace, so an empty
+			// filter clears the reviewer list here, as the footer says.
+			w.cfg.Reviewers = nil
 		}
 	}
 	w.redraw()
