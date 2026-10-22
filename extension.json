@@ -3,8 +3,8 @@
   "version": "0.15.29",
   "description": "poteto's pstack skills for zot: rigorous, principle-driven agent workflows",
   "language": "go",
-  "exec": "go",
-  "args": ["run", "./setup"],
+  "exec": "./bin/pstack-setup",
+  "args": [],
   "skills": ["skills"],
   "enabled": true
 }

@@ -1,0 +1,20 @@
+#!/bin/sh
+# Picks the pstack-setup binary for this machine and runs it.
+# zot runs one exec path per extension, so this launcher chooses the
+# platform binary. Build them with scripts/build.sh.
+set -eu
+
+dir=$(cd "$(dirname "$0")" && pwd)
+os=$(uname -s | tr '[:upper:]' '[:lower:]')
+arch=$(uname -m)
+case "$arch" in
+	x86_64|amd64) arch=amd64 ;;
+	arm64|aarch64) arch=arm64 ;;
+esac
+
+bin="$dir/pstack-setup-$os-$arch"
+if [ ! -x "$bin" ]; then
+	echo "pstack-setup: no binary for $os/$arch in $dir" >&2
+	exit 1
+fi
+exec "$bin" "$@"

@@ -22,7 +22,7 @@ Please note that if loaded using `--ext`, pstack will not function correctly for
 
 Requirements:
 
-- Go 1.22 or later on PATH. `/pstack-setup` runs through `go run ./setup`.
+- zot on PATH, for `/pstack-setup`'s model list. The extension ships prebuilt binaries for darwin and linux, amd64 and arm64, so Go is not needed to install or run it.
 - Auto-swarm must be **on**, set in `/settings`. Parallel steps use `swarm_spawn`.
 
 ## Use
@@ -80,7 +80,9 @@ Subagent results arrive later as an `[auto-swarm update]` message, not as a retu
 
 ```
 zot-pstack/
-├── extension.json      # manifest: skills and the /pstack-setup command
+├── extension.json      # manifest: skills, and the launcher that starts /pstack-setup
+├── bin/                # prebuilt pstack-setup binaries, one per platform
+├── scripts/build.sh    # rebuilds bin/ after changes under setup/
 ├── setup/              # Go source for /pstack-setup and /poteto-mode
 ├── skills/             # pstack skills, plus zot-adapter
 └── docs/guide/         # the pstack guide, read by some skills
