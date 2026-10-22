@@ -55,7 +55,7 @@ func (w *wizard) Render() (title string, lines []string, footer string) {
 		title = "pstack setup: provider"
 		lines = append(lines, "Pick the provider pstack models come from.", "")
 		if !w.autoSwarm {
-			lines = append(lines, "⚠ auto-swarm is off. pstack's parallel steps need it: turn it on in /settings.", "")
+			lines = append(lines, autoSwarmWarning, "")
 		}
 		for i, p := range Providers(w.entries) {
 			lines = append(lines, cursorRow(i == w.cursor, p))
@@ -89,6 +89,9 @@ func (w *wizard) Render() (title string, lines []string, footer string) {
 		title = "pstack setup: confirm"
 		lines = append(lines, "Will be written to:", "  "+w.path, "")
 		lines = append(lines, Describe(w.cfg)...)
+		if !w.autoSwarm {
+			lines = append(lines, "", autoSwarmWarning)
+		}
 		if w.saveErr != "" {
 			lines = append(lines, "", "save failed: "+w.saveErr)
 		}

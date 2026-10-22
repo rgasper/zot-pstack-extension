@@ -66,7 +66,7 @@ func TestProviderStepShowsWarningWhenAutoSwarmOff(t *testing.T) {
 	w, _ := newTestWizard(t)
 	w.autoSwarm = false
 	_, lines, _ := w.Render()
-	if !strings.Contains(strings.Join(lines, "\n"), "auto-swarm is off") {
+	if !strings.Contains(strings.Join(lines, "\n"), "auto-swarm is OFF") {
 		t.Fatalf("warning missing when auto-swarm is off: %v", lines)
 	}
 }
@@ -75,7 +75,7 @@ func TestProviderStepHasNoWarningWhenAutoSwarmOn(t *testing.T) {
 	w, _ := newTestWizard(t)
 	w.autoSwarm = true
 	_, lines, _ := w.Render()
-	if strings.Contains(strings.Join(lines, "\n"), "auto-swarm") {
+	if strings.Contains(strings.Join(lines, "\n"), "auto-swarm is OFF") {
 		t.Fatalf("no warning expected when auto-swarm is on: %v", lines)
 	}
 }
@@ -87,5 +87,31 @@ func TestWarningDoesNotBlockSaving(t *testing.T) {
 	w.step = stepConfirm
 	if !w.HandleKey("enter", "") {
 		t.Fatal("the warning must not stop the user from saving the config")
+	}
+}
+
+func TestConfirmStepShowsWarningWhenAutoSwarmOff(t *testing.T) {
+	w, _ := newTestWizard(t)
+	w.autoSwarm = false
+	w.cfg = Config{Provider: "amazon-bedrock", Workers: "anthropic.claude-haiku-5-5", Judges: "anthropic.claude-opus-5-5"}
+	w.step = stepConfirm
+	_, lines, _ := w.Render()
+	joined := strings.Join(lines, "\n")
+	if !strings.Contains(joined, "auto-swarm is OFF") {
+		t.Fatalf("confirm step missing warning: %v", lines)
+	}
+	if !strings.Contains(joined, "\x1b[1m") || !strings.Contains(joined, "\x1b[22m") {
+		t.Fatal("warning must be bold, with the bold closed on the same line")
+	}
+}
+
+func TestConfirmStepHasNoWarningWhenAutoSwarmOn(t *testing.T) {
+	w, _ := newTestWizard(t)
+	w.autoSwarm = true
+	w.cfg = Config{Provider: "amazon-bedrock", Workers: "anthropic.claude-haiku-5-5", Judges: "anthropic.claude-opus-5-5"}
+	w.step = stepConfirm
+	_, lines, _ := w.Render()
+	if strings.Contains(strings.Join(lines, "\n"), "auto-swarm is OFF") {
+		t.Fatal("no warning expected on confirm when auto-swarm is on")
 	}
 }
