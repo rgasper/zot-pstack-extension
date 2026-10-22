@@ -81,8 +81,8 @@ Subagent results arrive later as an `[auto-swarm update]` message, not as a retu
 ```
 zot-pstack/
 ├── extension.json      # manifest: skills, and the launcher that starts /pstack-setup
+├── Makefile            # make build | test | grab-original | clean
 ├── bin/                # prebuilt pstack-setup binaries, one per platform
-├── scripts/build.sh    # rebuilds bin/ after changes under setup/
 ├── setup/              # Go source for /pstack-setup and /poteto-mode
 ├── skills/             # pstack skills, plus zot-adapter
 └── docs/guide/         # the pstack guide, read by some skills
