@@ -1,10 +1,9 @@
 # pstack for zot
 
-Skills from poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack), packaged for [zot](https://github.com/patriceckhart/zot). pstack was a Cursor plugin, MIT, by Lauren Tan.
+Skills from poteto's [pstack](https://github.com/cursor/plugins/tree/main/pstack), packaged for [zot](https://github.com/patriceckhart/zot). pstack is a Cursor plugin, MIT Licensed, by Lauren Tan.
 
 ## Setup
 
-Run `/pstack-setup` in zot first. It picks a provider, then one model for each role group: workers, judges, and reviewers. It saves the choices to `$ZOT_HOME/pstack/models.json`.
 
 Install the extension:
 
@@ -18,10 +17,14 @@ Or load it for one session:
 zot --ext /path/to/zot-pstack
 ```
 
+Please note that if loaded using `--ext`, pstack will not function correctly for swarm agents, only the top-level agent.
+
+After installation, run `/pstack-setup` in zot. It lets you pick a model provider, then which models to use for each role group: workers, judges, and reviewers. It saves the choices to `$ZOT_HOME/pstack/models.json`. If you want to change providers or models mid-session, run `/pstack-setup` again.
+
 Requirements:
 
 - Go 1.22 or later on PATH. `/pstack-setup` runs through `go run ./setup`.
-- Auto-swarm on, set in `/settings`. Parallel steps use `swarm_spawn`.
+- Auto-swarm must be **on**, set in `/settings`. Parallel steps use `swarm_spawn`.
 
 ## Use
 
